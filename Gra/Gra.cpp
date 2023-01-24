@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <fstream>
+#include <locale.h>
 using namespace std;
 
 
@@ -49,17 +50,17 @@ public:
 	}
 
 	void okresl_plansze_2() {
-		cout << "Podaj liczbe wierszy i kolumn (najmniejsza powierzchnia planszy to 8x8). " << endl;
+		cout << "Podaj liczbę wierszy i kolumn (najmniejsza powierzchnia planszy to 8x8). " << endl;
 		cout << "Liczba wierszy: " << endl;
 		cin >> wiersze;
 		cout << "Liczba kolumn: " << endl;
 		cin >> kolumny;
 		if (wiersze < 8 || kolumny < 8) {
-			cout << "Wpisales za malo wierszy i(lub) kolumn, wpisz jeszcze raz: " << endl;
+			cout << "Wpisałeś za mało wierszy i(lub) kolumn, wpisz jeszcze raz: " << endl;
 			okresl_plansze_2();
 		}
 		else {
-			cout << "Wpisales prawidlowe liczby wierszy i kolumn, wymiary Twojej planszy to: " << endl;
+			cout << "Wpisałes prawidłowe liczby wierszy i kolumn, wymiary Twojej planszy to: " << endl;
 			cout << "Wiersze: " << wiersze << endl;
 			cout << "Kolumny: " << kolumny << endl;
 			cout << endl;
@@ -148,7 +149,7 @@ public:
 void wybor_bialego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja kontroluje prawidlowy wybor piona,
 	nie mozna wybrac piona innego niz bialy i piona, ktory nie lezy na linii ofensywnej*/
 
-	cout << "Wybierz bialego pionka, ktorym chcesz ruszyc (podaj kolejno wiersz i pole, na ktorym pionek sie znajduje). " << endl;
+	cout << "Wybierz białego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
 	cout << "Wiersze: " << endl;
 	cin >> bx1;
 	cout << "Kolumny: " << endl;
@@ -160,7 +161,7 @@ void wybor_bialego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 
 	if ((plansza1[bbx1][bby1]=='B')&&((plansza1[bx1][by1] == 'X') || (plansza1[bx1][by1] == ' ')) && ((plansza1[bx1][bbyy1] == 'X') || (plansza1[bx1][bbyy1] == ' '))) {
 	
-			cout << "Wybrales odpowiedniego pionka." << endl;
+			cout << "Wybrałeś odpowiedniego pionka." << endl;
 			bbx1 = bx1 - 1;
 			bby1 = by1 - 1;
 			plansza1[bbx1][bby1] = 'X';
@@ -169,7 +170,7 @@ void wybor_bialego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 
 	
 	else {
-		cout << "Wybrales nieodpowiedniego pionka, sprobuj ponownie. " << endl;
+		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie. " << endl;
 			wybor_bialego_piona_1();
 	}
 
@@ -177,7 +178,7 @@ void wybor_bialego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 
 };
 void wybor_czarnego_piona_1() {
-	cout << "Wybierz czarnego pionka, ktorym chcesz ruszyc (podaj kolejno wiersz i pole, na ktorym pionek sie znajduje). " << endl;
+	cout << "Wybierz czarnego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
 	cout << "Wiersze: " << endl;
 	cin >> bx1;
 	cout << "Kolumny: " << endl;
@@ -192,10 +193,10 @@ void wybor_czarnego_piona_1() {
 			bbx1 = bx1 - 1;
 			bby1 = by1 - 1;
 			plansza1[bbx1][bby1] = 'X';
-		cout << "Wybrales odpowiedniego pionka." << endl;
+		cout << "Wybrałeś odpowiedniego pionka." << endl;
 	}
 	else {
-		cout << "Wybrales nieodpowiedniego pionka, sprobuj ponownie. " << endl;
+		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie. " << endl;
 		wybor_czarnego_piona_1();
 	}
 
@@ -205,7 +206,7 @@ void ruch_bialego_gracza_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 		gracza, gracz nie moze sie ruszyc na inne pole, niz okreslone w regulach gry*/
 
 	
-	cout << "Wybierz pole, na ktore chcesz ruszyc (podaj kolejno wiersz i pole, na ktorym pionek ma sie znajdowac). " << endl;
+	cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdować). " << endl;
 	cout << "Wiersze: " << endl;
 	cin >> x;
 	cout << "Kolumny: " << endl;
@@ -215,10 +216,10 @@ void ruch_bialego_gracza_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 	
 	if (y%2!=2) {
 
-		cout << "Wybrales dozwolony ruch. " << endl;
+		cout << "Wybrałeś dozwolony ruch. " << endl;
 
 		int odp;
-		cout << "Zeby zaktualizowac plansze wcisnij 1. ";
+		cout << "Żeby zaktualizować planszę - wciśnij 1. ";
 		cin >> odp;
 		if (odp == 1) {
 			system("cls");
@@ -247,23 +248,23 @@ void ruch_bialego_gracza_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 	}
 	
 		else {
-			cout << "Wybrales niedozwolony ruch, sprobuj ponownie. " << endl;
+			cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie. " << endl;
 			ruch_bialego_gracza_1();
 		}
 	
 }
 void ruch_czarnego_gracza_1() {
-	cout << "Wybierz pole, na ktore chcesz ruszyc (podaj kolejno wiersz i pole, na ktorym pionek ma sie znajdowac). " << endl;
+	cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdowac). " << endl;
 	cout << "Wiersze: " << endl;
 	cin >> x;
 	cout << "Kolumny: " << endl;
 	cin >> y;
 
 	if (y % 2 == 0) {
-		cout << "Wybrales dozwolony ruch. " << endl;
+		cout << "Wybraleś dozwolony ruch. " << endl;
 
 		int odp;
-		cout << "Zeby zaktualizowac plansze wcisnij 1. ";
+		cout << "Żeby zaktualizować planszę - wciśnij 1. ";
 		cin >> odp;
 		if (odp == 1) {
 			system("cls");
@@ -293,7 +294,7 @@ void ruch_czarnego_gracza_1() {
 	}
 
 	else {
-		cout << "Wybrales niedozwolony ruch, sprobuj ponownie. " << endl;
+		cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie. " << endl;
 		ruch_czarnego_gracza_1();
 	}
 }
@@ -301,7 +302,7 @@ void ruch_czarnego_gracza_1() {
 void wybor_bialego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja kontroluje prawidlowy wybor piona,
 	nie mozna wybrac piona innego niz bialy i piona, ktory nie lezy na linii ofensywnej*/
 
-	cout << "Wybierz bialego pionka, ktorym chcesz ruszyc (podaj kolejno wiersz i pole, na ktorym pionek sie znajduje). " << endl;
+	cout << "Wybierz białego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
 	cout << "Wiersze: " << endl;
 	cin >> bx2;
 	cout << "Kolumny: " << endl;
@@ -314,7 +315,7 @@ void wybor_bialego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 
 	if ((plansza2[bbx2][bby2] == 'B') && ((plansza2[bx2][by2] == 'X') || (plansza2[bx2][by2] == ' ')) && ((plansza2[bx2][bbyy2] == 'X') || (plansza2[bx2][bbyy2] == ' '))) {
 
-		cout << "Wybrales odpowiedniego pionka." << endl;
+		cout << "Wybrałeś odpowiedniego pionka." << endl;
 		bbx1 = bx2 - 1;
 		bby1 = by2 - 1;
 		plansza2[bbx2][bby2] = 'X';
@@ -323,7 +324,7 @@ void wybor_bialego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 	
 	
 	else {
-		cout << "Wybrales nieodpowiedniego pionka, sprobuj ponownie. " << endl;
+		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie. " << endl;
 		wybor_bialego_piona_2();
 	}
 
@@ -336,7 +337,7 @@ void ruch_bialego_gracza_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 	gracza, gracz nie moze sie ruszyc na inne pole, niz okreslone w regulach gry*/
 
 
-	cout << "Wybierz pole, na ktore chcesz ruszyc (podaj kolejno wiersz i pole, na ktorym pionek ma sie znajdowac). " << endl;
+	cout << "Wybierz pole, na które chcesz ruszyc (podaj kolejno wiersz i pole, na którym pionek ma się znajdować). " << endl;
 	cout << "Wiersze: " << endl;
 	cin >> xx;
 	cout << "Kolumny: " << endl;
@@ -346,10 +347,10 @@ void ruch_bialego_gracza_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 
 
 	if (yy % 2 != 0) {
-		cout << "Wybrales dozwolony ruch. " << endl;
+		cout << "Wybrałeś dozwolony ruch. " << endl;
 
 		int odp;
-		cout << "Zeby zaktualizowac plansze wcisnij 1. ";
+		cout << "Żeby zaktualizować planszę - wcisnij 1. ";
 		cin >> odp;
 		if (odp == 1) {
 			system("cls");
@@ -383,7 +384,7 @@ void ruch_bialego_gracza_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 	}
 
 	else {
-		cout << "Wybrales niedozwolony ruch, sprobuj ponownie. " << endl;
+		cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie. " << endl;
 		ruch_bialego_gracza_2();
 	}
 
@@ -392,7 +393,7 @@ void ruch_bialego_gracza_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 void wybor_czarnego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja kontroluje prawidlowy wybor piona,
 	nie mozna wybrac piona innego niz bialy i piona, ktory nie lezy na linii ofensywnej*/
 
-	cout << "Wybierz czarnego pionka, ktorym chcesz ruszyc (podaj kolejno wiersz i pole, na ktorym pionek sie znajduje). " << endl;
+	cout << "Wybierz czarnego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
 	cout << "Wiersze: " << endl;
 	cin >> bx2;
 	cout << "Kolumny: " << endl;
@@ -407,10 +408,10 @@ void wybor_czarnego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 		bbx2 = bx2 - 1;
 		bby2 = by2 - 1;
 		plansza2[bbx2][bby2] = 'X';
-		cout << "Wybrales odpowiedniego pionka." << endl;
+		cout << "Wybrałeś odpowiedniego pionka." << endl;
 	}
 	else {
-		cout << "Wybrales nieodpowiedniego pionka, sprobuj ponownie. " << endl;
+		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie. " << endl;
 		wybor_czarnego_piona_2();
 	}
 
@@ -421,7 +422,7 @@ void ruch_czarnego_gracza_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 	gracza, gracz nie moze sie ruszyc na inne pole, niz okreslone w regulach gry*/
 
 
-	cout << "Wybierz pole, na ktore chcesz ruszyc (podaj kolejno wiersz i pole, na ktorym pionek ma sie znajdowac). " << endl;
+	cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma sie znajdować). " << endl;
 	cout << "Wiersze: " << endl;
 	cin >> xx;
 	cout << "Kolumny: " << endl;
@@ -431,10 +432,10 @@ void ruch_czarnego_gracza_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 
 
 	if ((yy % 2 == 0) && (xx == wiersze - 3)) {
-		cout << "Wybrales dozwolony ruch. " << endl;
+		cout << "Wybrałeś dozwolony ruch. " << endl;
 
 		int odp;
-		cout << "Zeby zaktualizowac plansze wcisnij 1. ";
+		cout << "Żeby zaktualizować planszę wciśnij 1. ";
 		cin >> odp;
 		if (odp == 1) {
 			system("cls");
@@ -468,27 +469,27 @@ void ruch_czarnego_gracza_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 	}
 
 	else {
-		cout << "Wybrales niedozwolony ruch, sprobuj ponownie. " << endl;
+		cout << "Wybrałes niedozwolony ruch, spróbuj ponownie. " << endl;
 		ruch_czarnego_gracza_2();
 	}
 
 }
 int main()
 {
-
+	setlocale(LC_CTYPE, "Polish");
 	Plansza plansza_1;
 	Plansza plansza_2;
 	cout << "\t\t\t" << "Witaj w grze WARCABY" << endl;
-	cout << "Wybierz plansze do gry (mozesz wybrac gotowy rozmiar (8x8 pol) lub wpisac wlasny)." << endl;
+	cout << "Wybierz planszę do gry (możesz wybrać gotowy rozmiar (8x8 pól) lub wpisać własny)." << endl;
 	int odpowiedz;
-	cout << "Jesli wybierasz gotowy rozmiar wcisnij 1, jesli chcesz wpisac wlasny rozmiar wcisnij 2. " << endl;
+	cout << "Jeśli wybierasz gotowy rozmiar wciśnij 1, jeśli chcesz wpisać własny rozmiar wciśnij 2. " << endl;
 	cin >> odpowiedz;
 
 	switch (odpowiedz) {//opcja wyboru planszy
 	case 1:
-		cout << "Wybrales gotowy rozmiar (8x8). " << endl;
+		cout << "Wybrałeś gotowy rozmiar (8x8). " << endl;
 		plansza_1.gotowa_plansza_1();
-		cout << "Gotowy? Gramy! Zaczyna bialy gracz. " << endl;
+		cout << "Gotowy? Gramy! Zaczyna biały gracz. " << endl;
 		do {
 			wybor_bialego_piona_1();
 			ruch_bialego_gracza_1();
@@ -501,7 +502,7 @@ int main()
 	case 2:
 		plansza_2.okresl_plansze_2();
 		plansza_2.rysuj_plansze_2();
-		cout << "Gotowy? Gramy! Zaczyna bialy gracz. " << endl;
+		cout << "Gotowy? Gramy! Zaczyna biały gracz. " << endl;
 		do {
 			wybor_bialego_piona_2();
 			ruch_bialego_gracza_2();
@@ -516,7 +517,7 @@ int main()
 		break;
 
 	default:
-		cout << "Nie wybrales zadnej opcji. Gra zamknie sie po wcisnieciu dowolnego klawisza." << endl;
+		cout << "Nie wybrałeś żadnej opcji. Gra zamknie się po wciśnięciu dowolnego klawisza." << endl;
 		return 0;
 	}
 
