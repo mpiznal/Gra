@@ -143,7 +143,7 @@ public:
 
 void wybor_bialego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja kontroluje prawidlowy wybor piona,
 	nie mozna wybrac piona innego niz bialy i piona, ktory nie lezy na linii ofensywnej*/
-	
+
 	cout << "Wybierz białego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
 	cout << "Wiersze: " << endl;
 	cin >> bx1;
@@ -158,101 +158,22 @@ void wybor_bialego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 	int y11 = y + 1;
 	int x1plus = x + 1;
 
-	if ((plansza1[bbx1][bby1]=='B')&&((plansza1[bx1][by1] == 'X'||' ') && ((plansza1[bx1][bbyy1] == 'X'||' ')))) {
-	
-			cout << "Wybrałeś odpowiedniego pionka." << endl;
+	if ((plansza1[bbx1][bby1] == 'B') && ((plansza1[bx1][by1] == 'X') || (plansza1[bx1][by1] == ' ')) && ((plansza1[bx1][bbyy1] == 'X') || (plansza1[bx1][bbyy1] == ' '))) {
 
-
-			
-			cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdować). " << endl;
-			cout << "Wiersze: " << endl;
-			cin >> x;
-			cout << "Kolumny: " << endl;
-			cin >> y;
-			
-
-			if (((by1-y==1||by1-y==(-1)) && (x - bx1 == 1)) && (plansza1[x][y] == 'X' || 'B') && (plansza1[x][y12] == 'X' || 'B')) {
-
-				cout << "Wybrałeś dozwolony ruch. " << endl;
-				bbx1 = bx1 - 1;
-				bby1 = by1 - 1;
-				plansza1[bbx1][bby1] = 'X';
-				int odp;
-				cout << "Żeby zaktualizować planszę - wciśnij 1. ";
-				cin >> odp;
-				if (odp == 1) {
-					system("cls");
-
-					cout << "Trwa aktualizacja planszy: " << endl;
-
-					w1 = x - 1;
-					k1 = y - 1;
-					plansza1[w1][k1] = 'B';
-
-					cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
-
-					nr = 0;
-					for (int i = 0; i < 8; i++) {
-						nr++;
-						cout << nr << " ";
-						for (int j = 0; j < 8; j++)
-						{
-							cout << plansza1[i][j] << "|";
-						}
-						cout << endl;
-					}
-				}
-				
-			}
-			else {
-				cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie." << endl;
-				wybor_bialego_piona_1();
-			}
-		
-	}
-	
-	else {
-		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie." << endl;
-		wybor_bialego_piona_1();
-	
-	}
-
-	
-	
-};
-
-void wybor_czarnego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja kontroluje prawidlowy wybor piona,
-	nie mozna wybrac piona innego niz bialy i piona, ktory nie lezy na linii ofensywnej*/
-
-	cout << "Wybierz czarnego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
-	cout << "Wiersze: " << endl;
-	cin >> bx1;
-	cout << "Kolumny: " << endl;
-	cin >> by1;
-	bbx1 = bx1 - 1;
-	bbxx1 = bx1 -2;
-	bby1 = by1 - 1;
-	bbyy1 = by1 - 2;
-
-	
-	if ((plansza1[bbx1][bby1] == 'C') && ((plansza1[bbxx1][bbyy1] == 'X'||' ') && ((plansza1[bbxx1][by1] == 'X' ||' ')))) {
-			
 		cout << "Wybrałeś odpowiedniego pionka." << endl;
 
 
 
-		cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdowac). " << endl;
+		cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdować). " << endl;
 		cout << "Wiersze: " << endl;
 		cin >> x;
 		cout << "Kolumny: " << endl;
 		cin >> y;
-		int x12 = x - 1;
-		int y12 = y - 1;
-		int y112 = y + 1;
-		
 
-		if (((by1-y==1||by1-y==(-1)) && (bx1-x == 1)) && (plansza1[x12][y12] == 'X' || 'C') && (plansza1[x12][y112] == 'X' || 'C')) {
-			cout << "Wybraleś dozwolony ruch. " << endl;
+
+		if ((((by1 - y == 1) || (by1 - y == (-1))) && (x - bx1 == 1)) && (((plansza1[x][y] == 'X') || (plansza1[x][y] == 'B')) && ((plansza1[x][y12] == 'X') || (plansza1[x][y12] == 'B')))) {
+
+			cout << "Wybrałeś dozwolony ruch. " << endl;
 			bbx1 = bx1 - 1;
 			bby1 = by1 - 1;
 			plansza1[bbx1][bby1] = 'X';
@@ -263,11 +184,10 @@ void wybor_czarnego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 				system("cls");
 
 				cout << "Trwa aktualizacja planszy: " << endl;
-				
 
 				w1 = x - 1;
 				k1 = y - 1;
-				plansza1[w1][k1] = 'C';
+				plansza1[w1][k1] = 'B';
 
 				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
 
@@ -280,9 +200,85 @@ void wybor_czarnego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 						cout << plansza1[i][j] << "|";
 					}
 					cout << endl;
-				
 				}
 			}
+
+		}
+		else {
+			cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie." << endl;
+			wybor_bialego_piona_1();
+		}
+	}
+
+	else {
+		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie." << endl;
+		wybor_bialego_piona_1();
+	
+	}	
+}
+
+void wybor_czarnego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja kontroluje prawidlowy wybor piona,
+	nie mozna wybrac piona innego niz bialy i piona, ktory nie lezy na linii ofensywnej*/
+
+	cout << "Wybierz czarnego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
+	cout << "Wiersze: " << endl;
+	cin >> bx1;
+	cout << "Kolumny: " << endl;
+	cin >> by1;
+	bbx1 = bx1 - 1;
+	bbxx1 = bx1 - 2;
+	bby1 = by1 - 1;
+	bbyy1 = by1 - 2;
+
+
+	if ((plansza1[bbx1][bby1] == 'C') && ((plansza1[bbxx1][bbyy1] == 'X') || (plansza1[bbxx1][bbyy1] == ' ')) && ((plansza1[bbxx1][by1] == 'X') || (plansza1[bbxx1][by1] == ' '))) {
+
+		cout << "Wybrałeś odpowiedniego pionka." << endl;
+
+
+
+		cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdowac). " << endl;
+		cout << "Wiersze: " << endl;
+		cin >> x;
+		cout << "Kolumny: " << endl;
+		cin >> y;
+		int x12 = x - 1;
+		int y12 = y - 1;
+		int y112 = y + 1;
+
+
+		if ((((by1 - y == 1 )|| (by1 - y == (-1))) && (bx1 - x == 1)) && (((plansza1[x12][y12] == 'X') || (plansza1[x12][y12] == 'C')) && ((plansza1[x12][y112] == 'X') || (plansza1[x12][y112] == 'C')))) {
+			cout << "Wybraleś dozwolony ruch. " << endl;
+				bbx1 = bx1 - 1;
+				bby1 = by1 - 1;
+				plansza1[bbx1][bby1] = 'X';
+				int odp;
+				cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+				cin >> odp;
+				if (odp == 1) {
+					system("cls");
+
+						cout << "Trwa aktualizacja planszy: " << endl;
+
+
+					w1 = x - 1;
+					k1 = y - 1;
+					plansza1[w1][k1] = 'C';
+
+					cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+					nr = 0;
+					for (int i = 0; i < 8; i++) {
+						nr++;
+						cout << nr << " ";
+						for (int j = 0; j < 8; j++)
+						{
+							cout << plansza1[i][j] << "|";
+						}
+						cout << endl;
+
+					}
+				}
 		}
 
 		else {
@@ -290,14 +286,12 @@ void wybor_czarnego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 			wybor_czarnego_piona_1();
 		}
 	}
+	
 	else {
 		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie. " << endl;
 		wybor_czarnego_piona_1();
 	}
-
-
-	
-};
+}
 
 
 
@@ -313,7 +307,7 @@ void wybor_bialego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 	bby2 = by2 - 1;
 	bbyy2 = by2 - 2;
 
-	if ((plansza2[bbx2][bby2] == 'B') && ((plansza2[bx2][by2] == 'X' || ' ') && ((plansza2[bx2][bbyy2] == 'X' || ' ')))) {
+	if ((plansza2[bbx2][bby2] == 'B') && ((plansza2[bx2][by2] == 'X') || (plansza2[bx2][by2] == ' ')) && ((plansza2[bx2][bbyy2] == 'X') || (plansza2[bx2][bbyy2] == ' '))) {
 
 		cout << "Wybrałeś odpowiedniego pionka." << endl;
 
@@ -326,51 +320,51 @@ void wybor_bialego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 		cin >> y;
 		int y12 = y - 2;
 
-		if (((by2 - y == 1 || by2 - y == (-1)) && (x - bx2 == 1)) && (plansza2[x][y] == 'X' || 'B') && (plansza2[x][y12] == 'X' || 'B')) {
+		if ((((by2 - y == 1) || (by2 - y == (-1))) && (x - bx2 == 1)) && (((plansza2[x][y] == 'X') || (plansza2[x][y] == 'B')) && ((plansza2[x][y12] == 'X') || (plansza2[x][y12] == 'B')))) {
 
 			cout << "Wybrałeś dozwolony ruch. " << endl;
-			bbx2 = bx2 - 1;
-			bby2 = by2 - 1;
-			plansza2[bbx2][bby2] = 'X';
-			int odp;
-			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
-			cin >> odp;
-			if (odp == 1) {
-				system("cls");
+				bbx2 = bx2 - 1;
+				bby2 = by2 - 1;
+				plansza2[bbx2][bby2] = 'X';
+				int odp;
+				cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+				cin >> odp;
+				if (odp == 1) {
+					system("cls");
 
-				cout << "Trwa aktualizacja planszy: " << endl;
+						cout << "Trwa aktualizacja planszy: " << endl;
 
-				w2 = x - 1;
-				k2 = y - 1;
+					w2 = x - 1;
+					k2 = y - 1;
 
 
-				for (int i = 0; i < 1; i++) {
-					for (int j = 0; j < kolumny + 1; j++) {
-						cout << j << " ";
+					for (int i = 0; i < 1; i++) {
+						for (int j = 0; j < kolumny + 1; j++) {
+							cout << j << " ";
+						}
+						cout << endl;
 					}
-					cout << endl;
-				}
 
-				plansza2[w2][k2] = 'B';
-				int nr = 0;
-				for (int i = 0; i < wiersze; i++) {
-					cout << "";
-					nr++;
-					cout << nr << " ";
-					for (int j = 0; j < kolumny; j++) {
-						cout << plansza2[i][j] << "|";
+					plansza2[w2][k2] = 'B';
+					int nr = 0;
+					for (int i = 0; i < wiersze; i++) {
+						cout << "";
+						nr++;
+						cout << nr << " ";
+						for (int j = 0; j < kolumny; j++) {
+							cout << plansza2[i][j] << "|";
+						}
+						cout << endl;
 					}
-					cout << endl;
 				}
-			}
 
 		}
 		else {
 			cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie." << endl;
 			wybor_bialego_piona_2();
 		}
-
 	}
+	
 	else {
 		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie." << endl;
 		wybor_bialego_piona_2();
@@ -396,7 +390,7 @@ void wybor_czarnego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 	bbyy2 = by2 - 2;
 
 
-	if ((plansza2[bbx2][bby2] == 'C') && ((plansza2[bbxx2][bbyy2] == 'X' || ' ') && ((plansza2[bbxx2][by2] == 'X' || ' ')))) {
+	if ((plansza2[bbx2][bby2] == 'C') && ((plansza2[bbxx2][bbyy2] == 'X') || (plansza2[bbxx2][bbyy2] == ' ')) && ((plansza2[bbxx2][by2] == 'X') || (plansza2[bbxx2][by2] == ' '))) {
 
 		cout << "Wybrałeś odpowiedniego pionka." << endl;
 
@@ -412,42 +406,42 @@ void wybor_czarnego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 		int y112 = y + 1;
 
 
-		if (((by2 - y == 1 || by2 - y == (-1)) && (bx2 - x == 1)) && (plansza2[x12][y12] == 'X' || 'C') && (plansza2[x12][y112] == 'X' || 'C')) {
+		if ((((by2 - y == 1) ||( by2 - y == (-1))) && (bx2 - x == 1)) && (((plansza2[x12][y12] == 'X') || (plansza2[x12][y12] == 'C')) && ((plansza2[x12][y112] == 'X') || (plansza2[x12][y112] == 'C')))) {
 			cout << "Wybraleś dozwolony ruch. " << endl;
-			bbx2 = bx2 - 1;
-			bby2 = by2 - 1;
-			plansza2[bbx2][bby2] = 'X';
-			int odp;
-			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
-			cin >> odp;
-			if (odp == 1) {
-				system("cls");
+				bbx2 = bx2 - 1;
+				bby2 = by2 - 1;
+				plansza2[bbx2][bby2] = 'X';
+				int odp;
+				cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+				cin >> odp;
+				if (odp == 1) {
+					system("cls");
 
-				cout << "Trwa aktualizacja planszy: " << endl;
+						cout << "Trwa aktualizacja planszy: " << endl;
 
-				w2 = x - 1;
-				k2 = y - 1;
+					w2 = x - 1;
+					k2 = y - 1;
 
 
-				for (int i = 0; i < 1; i++) {
-					for (int j = 0; j < kolumny + 1; j++) {
-						cout << j << " ";
+					for (int i = 0; i < 1; i++) {
+						for (int j = 0; j < kolumny + 1; j++) {
+							cout << j << " ";
+						}
+						cout << endl;
 					}
-					cout << endl;
-				}
 
-				plansza2[w2][k2] = 'C';
-				int nr = 0;
-				for (int i = 0; i < wiersze; i++) {
-					cout << "";
-					nr++;
-					cout << nr << " ";
-					for (int j = 0; j < kolumny; j++) {
-						cout << plansza2[i][j] << "|";
+					plansza2[w2][k2] = 'C';
+					int nr = 0;
+					for (int i = 0; i < wiersze; i++) {
+						cout << "";
+						nr++;
+						cout << nr << " ";
+						for (int j = 0; j < kolumny; j++) {
+							cout << plansza2[i][j] << "|";
+						}
+						cout << endl;
 					}
-					cout << endl;
 				}
-			}
 		}
 		else {
 			cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie. " << endl;
