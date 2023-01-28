@@ -6,13 +6,13 @@ using namespace std;
 
 int wiersze = 0, kolumny = 0;
 int w1 = 0, w2 = 0, k1 = 0, k2 = 0;
-int bx1 = 0, bx2 = 0, by1 = 0, by2 = 0;//zmienne wyboru i ruchu pionka
-int bbx1 = 0, bbx2 = 0, bbxx2=0, bbxx1=0, bby1=0, bbyy1 = 0, bby2 = 0, bbyy2=0;//zmienne wybioru pionka
-int x = 0, xx = 0, y = 0, yy = 0;
-
+int bx = 0, by = 0;//zmienne wyboru pionka
+int x = 0, y = 0;//zmienne ruchu pionka
+int liczba_białych_pionków = 12;
+int liczba_czarnych_pionków = 12;
 int i = 0, j = 0;
 int nr = 0;
-char plansza1[8][8] = {	   	' ','B',' ','B',' ','B',' ','B',
+char plansza1[8][8] = { ' ','B',' ','B',' ','B',' ','B',
 							  'B',' ','B',' ','B',' ','B',' ',
 							  ' ','B',' ','B',' ','B',' ','B',
 							  'X',' ','X',' ','X',' ','X',' ',
@@ -30,13 +30,13 @@ public:
 	friend void wybor_bialego_piona_2();
 	friend void wybor_czarnego_piona_2();
 
-	void gotowa_plansza_1() {
+	void gotowa_plansza_1() {//wywolywanie gotowej tablicy na ekran
 		cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
 
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 8; i++) {//dla wierszy
 			nr++;
 			cout << nr << " ";
-			for (int j = 0; j < 8; j++)
+			for (int j = 0; j < 8; j++)//dla kolumn
 			{
 				cout << plansza1[i][j] << "|";
 			}
@@ -44,94 +44,114 @@ public:
 		}
 	}
 
-	void okresl_plansze_2() {
-		cout << "Podaj liczbę wierszy i kolumn (najmniejsza powierzchnia planszy to 8x8). " << endl;
+	void okresl_plansze_2() {//ograniczenie tablicy dynamicznej co do wielkości wierszy, żeby można było stosować zasady gry
+		cout << "Podaj liczbę wierszy - tu możesz podać tylko liczby parzyste - i kolumn (najmniejsza powierzchnia planszy to 8x8). " << endl;
 		cout << "Liczba wierszy: " << endl;
 		cin >> wiersze;
-		cout << "Liczba kolumn: " << endl;
-		cin >> kolumny;
-		if (wiersze < 8 || kolumny < 8) {
-			cout << "Wpisałeś za mało wierszy i(lub) kolumn, wpisz jeszcze raz: " << endl;
+		if (wiersze % 2 != 0) {
+			cout << "Wpisałeś niepoprawną liczbę wierszy. Spróbuj ponownie." << endl;
 			okresl_plansze_2();
 		}
 		else {
-			cout << "Wpisałeś prawidłowe liczby wierszy i kolumn, wymiary Twojej planszy to: " << endl;
-			cout << "Wiersze: " << wiersze << endl;
-			cout << "Kolumny: " << kolumny << endl;
-			cout << endl;
+			cout << "Liczba kolumn: " << endl;
+			cin >> kolumny;
+			if (wiersze < 8 || kolumny < 8) {
+				cout << "Wpisałeś za mało wierszy i(lub) kolumn, wpisz jeszcze raz: " << endl;
+				okresl_plansze_2();
+			}
+			else {
+				cout << "Wpisałeś prawidłowe liczby wierszy i kolumn, wymiary Twojej planszy to: " << endl;
+				cout << "Wiersze: " << wiersze << endl;
+				cout << "Kolumny: " << kolumny << endl;
+				cout << endl;
+			}
 		}
 
-		plansza2 = new char* [wiersze];
+		plansza2 = new char* [wiersze];//tworzenie pierwszego wymiaru tablicy dynamicznej
 
 		for (int i = 0; i < wiersze; i++)
-			plansza2[i] = new char[kolumny];
+			plansza2[i] = new char[kolumny];//tworzenie drugiego wymiaru tablicy dynamicznej
 
-		for (int i = 0; i < 1; i++) {
-			for (int j = 0; j < kolumny + 1; j++) {
+
+	}
+
+	void rysuj_plansze_2() {
+		//górna część planszy - określenie pól tablicy dynamicznej
+		for (int i = 0; i < 1; i += 2)
+			for (int j = 0; j < kolumny; j += 2)
+				plansza2[i][j] = ' ';
+		for (int i = 0; i < 1; i += 2)
+			for (int j = 1; j < kolumny; j += 2)
+				plansza2[i][j] = 'B';
+
+		for (int i = 1; i < 2; i += 2)
+			for (int j = 0; j < kolumny; j += 2)
+				plansza2[i][j] = 'B';
+		for (int i = 1; i < 2; i += 2)
+			for (int j = 1; j < kolumny; j += 2)
+				plansza2[i][j] = ' ';
+
+		for (int i = 2; i < 3; i += 2)
+			for (int j = 0; j < kolumny; j += 2)
+				plansza2[i][j] = ' ';
+		for (int i = 2; i < 3; i += 2)
+			for (int j = 1; j < kolumny; j += 2)
+				plansza2[i][j] = 'B';
+
+		//dolna czesc planszy - określenie pól tablicy dynamicznej
+		for (int i = wiersze - 1; i < wiersze; i += 2)
+			for (int j = 0; j < kolumny; j += 2)
+				plansza2[i][j] = 'C';
+		for (int i = wiersze - 1; i < wiersze; i += 2)
+			for (int j = 1; j < kolumny; j += 2)
+				plansza2[i][j] = ' ';
+
+		for (int i = wiersze - 2; i < wiersze; i += 2)
+			for (int j = 0; j < kolumny; j += 2)
+				plansza2[i][j] = ' ';
+		for (int i = wiersze - 2; i < wiersze; i += 2)
+			for (int j = 1; j < kolumny; j += 2)
+				plansza2[i][j] = 'C';
+
+		for (int i = wiersze - 3; i < wiersze; i += 2)
+			for (int j = 0; j < kolumny; j += 2)
+				plansza2[i][j] = 'C';
+		for (int i = wiersze - 3; i < wiersze; i += 2)
+			for (int j = 1; j < kolumny; j += 2)
+				plansza2[i][j] = ' ';
+
+		//środkowa część planszy - określenie pól tablicy dynamicznej
+		for (int i = 3; i < wiersze - 3; i += 2)
+			for (int j = 0; j < kolumny; j += 2)
+				plansza2[i][j] = 'X';
+		for (int i = 3; i < wiersze - 3; i += 2)
+			for (int j = 1; j < kolumny; j += 2)
+				plansza2[i][j] = ' ';
+
+		for (int i = 4; i < wiersze - 3; i += 2)
+			for (int j = 0; j < kolumny; j += 2)
+				plansza2[i][j] = ' ';
+		for (int i = 4; i < wiersze - 3; i += 2)
+			for (int j = 1; j < kolumny; j += 2)
+				plansza2[i][j] = 'X';
+
+
+		for (int i = 0; i < 1; i++) {//wywoływanie na ekran oznaczeń dla tablicy dynamicznej
+			cout << "  ";
+			for (int j = 1; j < kolumny + 1; j++) {
 				cout << j << " ";
 			}
 			cout << endl;
 		}
-	}
-
-	void rysuj_plansze_2() {
-		//gorna czesc planszy
-		for (int i = 0; i < 1; i += 2)
-			for (int j = 0; j < kolumny; j += 2)
-				plansza2[i][j] = ' ';
-		for (int i = 0; i < 1; i += 2)
-			for (int j = 1; j < kolumny; j += 2)
-				plansza2[i][j] = 'B';
-
-		for (int i = 1; i < 2; i += 2)
-			for (int j = 0; j < kolumny; j += 2)
-				plansza2[i][j] = 'B';
-		for (int i = 1; i < 2; i += 2)
-			for (int j = 1; j < kolumny; j += 2)
-				plansza2[i][j] = ' ';
-
-		for (int i = 2; i < 3; i += 2)
-			for (int j = 0; j < kolumny; j += 2)
-				plansza2[i][j] = ' ';
-		for (int i = 2; i < 3; i += 2)
-			for (int j = 1; j < kolumny; j += 2)
-				plansza2[i][j] = 'B';
-
-		//dolna czesc planszy
-		for (int i = wiersze - 1; i < wiersze; i += 2)
-			for (int j = 0; j < kolumny; j += 2)
-				plansza2[i][j] = 'C';
-		for (int i = wiersze - 1; i < wiersze; i += 2)
-			for (int j = 1; j < kolumny; j += 2)
-				plansza2[i][j] = ' ';
-
-		for (int i = wiersze - 2; i < wiersze; i += 2)
-			for (int j = 0; j < kolumny; j += 2)
-				plansza2[i][j] = ' ';
-		for (int i = wiersze - 2; i < wiersze; i += 2)
-			for (int j = 1; j < kolumny; j += 2)
-				plansza2[i][j] = 'C';
-
-		for (int i = wiersze - 3; i < wiersze; i += 2)
-			for (int j = 0; j < kolumny; j += 2)
-				plansza2[i][j] = 'C';
-		for (int i = wiersze - 3; i < wiersze; i += 2)
-			for (int j = 1; j < kolumny; j += 2)
-				plansza2[i][j] = ' ';
-
-		//srodkowa czesc planszy
-		for (int i = 3; i < wiersze - 3; i++)
-			for (int j = 0; j < kolumny; j++)
-				plansza2[i][j] = ' ';
-
 
 		for (int i = 0; i < wiersze; i++) {
 			cout << "";
 			nr++;
 			cout << nr << " ";
 			for (int j = 0; j < kolumny; j++) {
-				cout << plansza2[i][j] << "|";
+				cout << plansza2[i][j] << "|";//wywoływanie na ekran tablicy dynamicznej
 			}
+
 			cout << endl;
 		}
 		cout << endl;
@@ -146,23 +166,214 @@ void wybor_bialego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 
 	cout << "Wybierz białego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
 	cout << "Wiersze: " << endl;
-	cin >> bx1;
+	cin >> bx;
 	cout << "Kolumny: " << endl;
-	cin >> by1;
-	bbx1 = bx1 - 1;
-	bbxx1 = bx1 + 1;
-	bby1 = by1 - 1;
-	bbyy1 = by1 - 2;
-	int y12 = y - 2;
-	int y13 = y - 3;
-	int y11 = y + 1;
-	int x1plus = x + 1;
+	cin >> by;
 
-	if ((plansza1[bbx1][bby1] == 'B') && ((plansza1[bx1][by1] == 'X') || (plansza1[bx1][by1] == ' ')) && ((plansza1[bx1][bbyy1] == 'X') || (plansza1[bx1][bbyy1] == ' '))) {
+	int bxminus1 = bx - 1;
+	int byminus1 = by - 1;
+	int bxplus1 = bx + 1;
+	int byplus1 = by + 1;
+	int bxminus2 = bx - 2;
+	int byminus2 = by - 2;
+	int byminus3 = by - 3;
 
-		cout << "Wybrałeś odpowiedniego pionka." << endl;
+	//dla wyboru pionka i ruchu bijącego po obu stronach
+	if ((plansza1[bxminus1][byminus1] == 'B') && (plansza1[bx][by] == 'C') && (plansza1[bx][by - 2] == 'C') && (plansza1[bxplus1][byplus1] == 'X') && (plansza1[bxplus1][byminus3] == 'X')) {
+		cout << "Możesz zbić przeciwnika w obie strony. Zdecyduj, którą opcję wybierasz." << endl;
+		int odpowiedz;
+		cout << "Jeśli wybierasz bicie w prawą stronę wciśnij 1, jeśli wybierasz bicie w lewą stronę wciśnij 2. " << endl;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona czarnego przez piona białego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_czarnych_pionków = liczba_czarnych_pionków - 1;//pomniejszanie liczby pionków
+				plansza1[bx][by] = 'X';
+				plansza1[bxplus1][byplus1] = 'B';
+
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+				nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+			cout << "Następuje bicie piona czarnego przez piona białego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odpow;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odpow;
+			if (odpow == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_czarnych_pionków = liczba_czarnych_pionków - 1;
+				plansza1[bx][byminus2] = 'X';
+				plansza1[bxplus1][byminus3] = 'B';
+
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+				nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		}
+
+	}
+
+	//dla wyboru pionka i ruchu bijącego w prawo
+	else if ((plansza1[bxminus1][byminus1] == 'B') && ((plansza1[bx][by] == 'C') && (plansza1[bxplus1][byplus1] == 'X'))) {
+
+		cout << "Czy chcesz zbić pionka przeciwnika w prawą stronę? Wciśnij 1, jeśli tak, wciśnij 2, jeśli ruszasz się w lewo." << endl;
+		int odpowiedz = 0;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona czarnego przez piona białego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+				liczba_czarnych_pionków = liczba_czarnych_pionków - 1;
+				cout << "Trwa aktualizacja planszy: " << endl;
+
+				plansza1[bx][by] = 'X';
+				plansza1[bxplus1][byplus1] = 'B';
+
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+				nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+			plansza1[bxminus1][byminus1] = 'X';
+			plansza1[bx][byminus2] = 'B';
+			
+			cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+			nr = 0;
+			for (int i = 0; i < 8; i++) {
+				nr++;
+				cout << nr << " ";
+				for (int j = 0; j < 8; j++)
+				{
+					cout << plansza1[i][j] << "|";
+				}
+				cout << endl;
+			}
+
+		}
+	}
+	//dla wyboru pionka i ruchu bijącego w lewo
+	else if ((plansza1[bxminus1][byminus1] == 'B') && ((plansza1[bx][byminus2] == 'C') && (plansza1[bxplus1][byminus3] == 'X'))) {
+
+		cout << "Czy chcesz zbić pionka przeciwnika w lewą stronę? Wciśnij 1, jeśli tak, wciśnij 2, jeśli ruszasz się w prawo." << endl;
+		int odpowiedz = 0;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona czarnego przez piona białego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_czarnych_pionków = liczba_czarnych_pionków - 1;
+				plansza1[bx][byminus2] = 'X';
+				plansza1[bxplus1][byminus3] = 'B';
+
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+				nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+
+			plansza1[bxminus1][byminus1] = 'X';
+			plansza1[bx][by] = 'B';
+			
+			cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+			nr = 0;
+			for (int i = 0; i < 8; i++) {
+				nr++;
+				cout << nr << " ";
+				for (int j = 0; j < 8; j++)
+				{
+					cout << plansza1[i][j] << "|";
+				}
+				cout << endl;
+			}
+
+		}
+	}
 
 
+	//dla zwykłego wyboru pionka
+	else if ((plansza1[bxminus1][byminus1] == 'B') && ((plansza1[bx][byminus2] == 'X') || (plansza1[bx][by] == 'X'))) {
+
+		if (by <= 8) {
+			cout << "Wybrałeś odpowiedniego pionka." << endl;//ograniczenie drugiego wymiaru tablicy statycznej
+		}
+		else {
+			cout << "Wybrałeś nieprawidłowego pionka. Spróbuj ponownie." << endl;
+			wybor_bialego_piona_1();
+		}
 
 		cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdować). " << endl;
 		cout << "Wiersze: " << endl;
@@ -170,13 +381,22 @@ void wybor_bialego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 		cout << "Kolumny: " << endl;
 		cin >> y;
 
+		int xplus1 = x + 1;
+		int yplus1 = y + 1;
+		int xminus1 = x - 1;
+		int yminus1 = y - 1;
+		int xplus2 = x + 2;
+		int yplus2 = y + 2;
+		int xminus2 = x - 2;
+		int yminus2 = y - 2;
 
-		if ((((by1 - y == 1) || (by1 - y == (-1))) && (x - bx1 == 1)) && (((plansza1[x][y] == 'X') || (plansza1[x][y] == 'B')) && ((plansza1[x][y12] == 'X') || (plansza1[x][y12] == 'B')))) {
 
+		//określenie zwykłego ruchu
+		if ((x - bx == 1) && (plansza1[xminus1][yminus1] == 'X') && ((y - by == 1) || (y - by == (-1)))) {
 			cout << "Wybrałeś dozwolony ruch. " << endl;
-			bbx1 = bx1 - 1;
-			bby1 = by1 - 1;
-			plansza1[bbx1][bby1] = 'X';
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
 			int odp;
 			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
 			cin >> odp;
@@ -202,19 +422,20 @@ void wybor_bialego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja
 					cout << endl;
 				}
 			}
-
 		}
+
 		else {
-			cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie." << endl;
+			cout << "Wybrałeś niedozwolony ruch. Spróbuj ponownie." << endl;
 			wybor_bialego_piona_1();
 		}
 	}
 
 	else {
-		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie." << endl;
+		cout << "Wybrałeś nieodpowiedniego pionka. Spróbuj ponownie." << endl;
 		wybor_bialego_piona_1();
-	
-	}	
+	}
+
+
 }
 
 void wybor_czarnego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja kontroluje prawidlowy wybor piona,
@@ -222,238 +443,765 @@ void wybor_czarnego_piona_1() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcj
 
 	cout << "Wybierz czarnego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
 	cout << "Wiersze: " << endl;
-	cin >> bx1;
+	cin >> bx;
 	cout << "Kolumny: " << endl;
-	cin >> by1;
-	bbx1 = bx1 - 1;
-	bbxx1 = bx1 - 2;
-	bby1 = by1 - 1;
-	bbyy1 = by1 - 2;
+	cin >> by;
 
+	int bxminus1 = bx - 1;
+	int byminus1 = by - 1;
+	int bxplus1 = bx + 1;
+	int byplus1 = by + 1;
+	int bxplus2 = bx + 2;
+	int bxminus2 = bx - 2;
+	int byminus2 = by - 2;
+	int bxminus3 = bx - 3;
+	int byminus3 = by - 3;
 
-	if ((plansza1[bbx1][bby1] == 'C') && ((plansza1[bbxx1][bbyy1] == 'X') || (plansza1[bbxx1][bbyy1] == ' ')) && ((plansza1[bbxx1][by1] == 'X') || (plansza1[bbxx1][by1] == ' '))) {
+	if ((plansza1[bxminus1][byminus1] == 'C') && (plansza1[bxminus2][byminus2] == 'B') && (plansza1[bxminus2][by] == 'B') && (plansza1[bxminus3][byplus1] == 'X') && (plansza1[bxminus3][byminus3] == 'X')) {
+		cout << "Możesz zbić przeciwnika w obie strony. Zdecyduj, którą opcję wybierasz." << endl;
+		int odpowiedz;
+		cout << "Jeśli wybierasz bicie w prawą stronę wciśnij 1, jeśli wybierasz bicie w lewą stronę wciśnij 2. " << endl;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona białego przez piona czarnego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
 
-		cout << "Wybrałeś odpowiedniego pionka." << endl;
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_białych_pionków = liczba_białych_pionków - 1;
+				plansza1[bxminus2][by] = 'X';
+				plansza1[bxminus3][byplus1] = 'C';
 
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
 
+				nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+			cout << "Następuje bicie piona białego przez piona czarnego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odpow;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odpow;
+			if (odp == 1) {
+				system("cls");
+				liczba_białych_pionków = liczba_białych_pionków - 1;
+				cout << "Trwa aktualizacja planszy: " << endl;
 
-		cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdowac). " << endl;
+				plansza1[bxminus1][byminus1] = 'X';
+				plansza1[bxminus2][byminus2] = 'X';
+				plansza1[bxminus3][byminus3] = 'C';
+
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+				nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		}
+
+	}
+
+	else if ((plansza1[bxminus1][byminus1] == 'C') && ((plansza1[bxminus2][by] == 'B') && (plansza1[bxminus3][byplus1] == 'X'))) {
+
+		cout << "Czy chcesz zbić pionka przeciwnika w prawą stronę? Wciśnij 1, jeśli tak, wciśnij 2, jeśli nie." << endl;
+		int odpowiedz = 0;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona białego przez piona czarnego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+				liczba_białych_pionków = liczba_białych_pionków - 1;
+				cout << "Trwa aktualizacja planszy: " << endl;
+
+				plansza1[bxminus2][by] = 'X';
+				plansza1[bxminus3][byplus1] = 'C';
+
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+				nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+
+			wybor_czarnego_piona_1();
+
+		}
+	}
+	else if ((plansza1[bxminus1][byminus1] == 'C') && ((plansza1[bxminus2][byminus2] == 'B') && (plansza1[bxminus3][byminus3] == 'X'))) {
+
+		cout << "Czy chcesz zbić pionka przeciwnika w lewą stronę? Wciśnij 1, jeśli tak, wciśnij 2, jeśli nie." << endl;
+		int odpowiedz = 0;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona białego przez piona czarnego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_białych_pionków = liczba_białych_pionków - 1;
+				plansza1[bxminus1][byminus1] = 'X';
+				plansza1[bxminus2][byminus2] = 'X';
+				plansza1[bxminus3][byminus3] = 'C';
+
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+				nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+
+			wybor_czarnego_piona_1();
+
+		}
+	}
+	else if ((plansza1[bxminus1][byminus1] == 'C') && ((plansza1[bxminus2][byminus2] == 'X') || (plansza1[bxminus2][by] == 'X'))) {
+		if (by <= 8) {
+			cout << "Wybrałeś odpowiedniego pionka." << endl;
+		}
+		else {
+			cout << "Wybrałeś nieprawidłowego pionka. Spróbuj ponownie." << endl;
+			wybor_czarnego_piona_1();
+		}
+		cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdować). " << endl;
 		cout << "Wiersze: " << endl;
 		cin >> x;
 		cout << "Kolumny: " << endl;
 		cin >> y;
-		int x12 = x - 1;
-		int y12 = y - 1;
-		int y112 = y + 1;
+
+		int xplus1 = x + 1;
+		int yplus1 = y + 1;
+		int xminus1 = x - 1;
+		int yminus1 = y - 1;
+		int xplus2 = x + 2;
+		int yplus2 = y + 2;
+		int xminus2 = x - 2;
+		int yminus2 = y - 2;
 
 
-		if ((((by1 - y == 1 )|| (by1 - y == (-1))) && (bx1 - x == 1)) && (((plansza1[x12][y12] == 'X') || (plansza1[x12][y12] == 'C')) && ((plansza1[x12][y112] == 'X') || (plansza1[x12][y112] == 'C')))) {
-			cout << "Wybraleś dozwolony ruch. " << endl;
-				bbx1 = bx1 - 1;
-				bby1 = by1 - 1;
-				plansza1[bbx1][bby1] = 'X';
-				int odp;
-				cout << "Żeby zaktualizować planszę - wciśnij 1. ";
-				cin >> odp;
-				if (odp == 1) {
-					system("cls");
 
-						cout << "Trwa aktualizacja planszy: " << endl;
+		if ((bx - x == 1) && (plansza1[xminus1][yminus1] == 'X') && ((y - by == 1) || (y - by == (-1)))) {
+			cout << "Wybrałeś dozwolony ruch. " << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
 
+				cout << "Trwa aktualizacja planszy: " << endl;
 
-					w1 = x - 1;
-					k1 = y - 1;
-					plansza1[w1][k1] = 'C';
+				w1 = x - 1;
+				k1 = y - 1;
+				plansza1[w1][k1] = 'C';
 
-					cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
 
-					nr = 0;
-					for (int i = 0; i < 8; i++) {
-						nr++;
-						cout << nr << " ";
-						for (int j = 0; j < 8; j++)
-						{
-							cout << plansza1[i][j] << "|";
-						}
-						cout << endl;
-
+				nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
 					}
+					cout << endl;
 				}
+			}
 		}
 
 		else {
-			cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie. " << endl;
+			cout << "Wybrałeś niedozwolony ruch. Spróbuj ponownie." << endl;
 			wybor_czarnego_piona_1();
 		}
 	}
-	
+
 	else {
-		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie. " << endl;
+		cout << "Wybrałeś nieodpowiedniego pionka. Spróbuj ponownie." << endl;
 		wybor_czarnego_piona_1();
 	}
-}
 
+
+}
 
 
 void wybor_bialego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja kontroluje prawidlowy wybor piona,
 	nie mozna wybrac piona innego niz bialy i piona, ktory nie lezy na linii ofensywnej*/
+
 	cout << "Wybierz białego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
 	cout << "Wiersze: " << endl;
-	cin >> bx2;
+	cin >> bx;
 	cout << "Kolumny: " << endl;
-	cin >> by2;
-	bbx2 = bx2 - 1;
-	bbxx2 = bx2 + 1;
-	bby2 = by2 - 1;
-	bbyy2 = by2 - 2;
+	cin >> by;
 
-	if ((plansza2[bbx2][bby2] == 'B') && ((plansza2[bx2][by2] == 'X') || (plansza2[bx2][by2] == ' ')) && ((plansza2[bx2][bbyy2] == 'X') || (plansza2[bx2][bbyy2] == ' '))) {
+	int bxminus1 = bx - 1;
+	int byminus1 = by - 1;
+	int bxplus1 = bx + 1;
+	int byplus1 = by + 1;
+	int bxminus2 = bx - 2;
+	int byminus2 = by - 2;
+	int byminus3 = by - 3;
+
+
+	if ((plansza2[bxminus1][byminus1] == 'B') && (plansza2[bx][by] == 'C') && (plansza2[bx][by - 2] == 'C') && (plansza2[bxplus1][byplus1] == 'X') && (plansza2[bxplus1][byminus3] == 'X')) {
+		cout << "Możesz zbić przeciwnika w obie strony. Zdecyduj, którą opcję wybierasz." << endl;
+		int odpowiedz;
+		cout << "Jeśli wybierasz bicie w prawą stronę wciśnij 1, jeśli wybierasz bicie w lewą stronę wciśnij 2. " << endl;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona czarnego przez piona białego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza2[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_czarnych_pionków = liczba_czarnych_pionków - 1;
+				plansza2[bx][by] = 'X';
+				plansza2[bxplus1][byplus1] = 'B';
+
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < kolumny + 1; j++) {
+						cout << j << " ";
+					}
+					cout << endl;
+				}
+				int nr = 0;
+				for (int i = 0; i < wiersze; i++) {
+					cout << "";
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < kolumny; j++) {
+						cout << plansza2[i][j] << "|";
+					}
+					cout << endl;
+				}
+
+			}
+			break;
+		case 2:
+			cout << "Następuje bicie piona czarnego przez piona białego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza2[bxminus1][byminus1] = 'X';
+			int odpow;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odpow;
+			if (odpow == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_czarnych_pionków = liczba_czarnych_pionków - 1;
+				plansza2[bx][byminus2] = 'X';
+				plansza2[bxplus1][byminus3] = 'B';
+
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < kolumny + 1; j++) {
+						cout << j << " ";
+					}
+					cout << endl;
+				}
+				int nr = 0;
+				for (int i = 0; i < wiersze; i++) {
+					cout << "";
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < kolumny; j++) {
+						cout << plansza2[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		}
+
+	}
+
+	else if ((plansza2[bxminus1][byminus1] == 'B') && ((plansza2[bx][by] == 'C') && (plansza2[bxplus1][byplus1] == 'X'))) {
+
+		cout << "Czy chcesz zbić pionka przeciwnika w prawą stronę? Wciśnij 1, jeśli tak, wciśnij 2, jeśli nie." << endl;
+		int odpowiedz = 0;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona czarnego przez piona białego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza2[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+				liczba_czarnych_pionków = liczba_czarnych_pionków - 1;
+				cout << "Trwa aktualizacja planszy: " << endl;
+
+				plansza2[bx][by] = 'X';
+				plansza2[bxplus1][byplus1] = 'B';
+
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < kolumny + 1; j++) {
+						cout << j << " ";
+					}
+					cout << endl;
+				}
+				int nr = 0;
+				for (int i = 0; i < wiersze; i++) {
+					cout << "";
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < kolumny; j++) {
+						cout << plansza2[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+
+			wybor_bialego_piona_2();
+
+		}
+	}
+	else if ((plansza2[bxminus1][byminus1] == 'B') && ((plansza2[bx][byminus2] == 'C') && (plansza2[bxplus1][byminus3] == 'X'))) {
+
+		cout << "Czy chcesz zbić pionka przeciwnika w lewą stronę? Wciśnij 1, jeśli tak, wciśnij 2, jeśli nie." << endl;
+		int odpowiedz = 0;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona czarnego przez piona białego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza2[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_czarnych_pionków = liczba_czarnych_pionków - 1;
+				plansza2[bx][byminus2] = 'X';
+				plansza2[bxplus1][byminus3] = 'B';
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < kolumny + 1; j++) {
+						cout << j << " ";
+					}
+					cout << endl;
+				}
+				int nr = 0;
+				for (int i = 0; i < wiersze; i++) {
+					cout << "";
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < kolumny; j++) {
+						cout << plansza2[i][j] << "|";
+					}
+					cout << endl;
+				}
+
+			}
+			break;
+		case 2:
+
+			wybor_bialego_piona_2();
+
+		}
+	}
+	else if ((plansza2[bxminus1][byminus1] == 'B') && ((plansza2[bx][byminus2] == 'X') || (plansza1[bx][by] == 'X'))) {
 
 		cout << "Wybrałeś odpowiedniego pionka." << endl;
-
-
 
 		cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdować). " << endl;
 		cout << "Wiersze: " << endl;
 		cin >> x;
 		cout << "Kolumny: " << endl;
 		cin >> y;
-		int y12 = y - 2;
 
-		if ((((by2 - y == 1) || (by2 - y == (-1))) && (x - bx2 == 1)) && (((plansza2[x][y] == 'X') || (plansza2[x][y] == 'B')) && ((plansza2[x][y12] == 'X') || (plansza2[x][y12] == 'B')))) {
+		int xplus1 = x + 1;
+		int yplus1 = y + 1;
+		int xminus1 = x - 1;
+		int yminus1 = y - 1;
+		int xplus2 = x + 2;
+		int yplus2 = y + 2;
+		int xminus2 = x - 2;
+		int yminus2 = y - 2;
 
+
+
+		if ((x - bx == 1) && (plansza2[xminus1][yminus1] == 'X') && ((y - by == 1) || (y - by == (-1)))) {
 			cout << "Wybrałeś dozwolony ruch. " << endl;
-				bbx2 = bx2 - 1;
-				bby2 = by2 - 1;
-				plansza2[bbx2][bby2] = 'X';
-				int odp;
-				cout << "Żeby zaktualizować planszę - wciśnij 1. ";
-				cin >> odp;
-				if (odp == 1) {
-					system("cls");
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza2[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
 
-						cout << "Trwa aktualizacja planszy: " << endl;
+				cout << "Trwa aktualizacja planszy: " << endl;
 
-					w2 = x - 1;
-					k2 = y - 1;
+				w1 = x - 1;
+				k1 = y - 1;
+				plansza2[w1][k1] = 'B';
 
-
-					for (int i = 0; i < 1; i++) {
-						for (int j = 0; j < kolumny + 1; j++) {
-							cout << j << " ";
-						}
-						cout << endl;
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < kolumny + 1; j++) {
+						cout << j << " ";
 					}
-
-					plansza2[w2][k2] = 'B';
-					int nr = 0;
-					for (int i = 0; i < wiersze; i++) {
-						cout << "";
-						nr++;
-						cout << nr << " ";
-						for (int j = 0; j < kolumny; j++) {
-							cout << plansza2[i][j] << "|";
-						}
-						cout << endl;
-					}
+					cout << endl;
 				}
-
+				int nr = 0;
+				for (int i = 0; i < wiersze; i++) {
+					cout << "";
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < kolumny; j++) {
+						cout << plansza2[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
 		}
+
 		else {
-			cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie." << endl;
+			cout << "Wybrałeś niedozwolony ruch. Spróbuj ponownie." << endl;
 			wybor_bialego_piona_2();
 		}
 	}
-	
+
+
+
 	else {
-		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie." << endl;
+		cout << "Wybrałeś nieodpowiedniego pionka. Spróbuj ponownie." << endl;
 		wybor_bialego_piona_2();
-
 	}
+
+
 }
-
-
-
-
 
 void wybor_czarnego_piona_2() {/*uzycie zaprzyjaznionej funkcji do klasy, funkcja kontroluje prawidlowy wybor piona,
 	nie mozna wybrac piona innego niz bialy i piona, ktory nie lezy na linii ofensywnej*/
 
 	cout << "Wybierz czarnego pionka, którym chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek się znajduje). " << endl;
 	cout << "Wiersze: " << endl;
-	cin >> bx2;
+	cin >> bx;
 	cout << "Kolumny: " << endl;
-	cin >> by2;
-	bbx2 = bx2 - 1;
-	bbxx2 = bx2 - 2;
-	bby2 = by2 - 1;
-	bbyy2 = by2 - 2;
+	cin >> by;
 
+	int bxminus1 = bx - 1;
+	int byminus1 = by - 1;
+	int bxplus1 = bx + 1;
+	int byplus1 = by + 1;
+	int bxplus2 = bx + 2;
+	int bxminus2 = bx - 2;
+	int byminus2 = by - 2;
+	int bxminus3 = bx - 3;
+	int byminus3 = by - 3;
+	if ((plansza2[bxminus1][byminus1] == 'C') && (plansza2[bxminus2][byminus2] == 'B') && (plansza2[bxminus2][by] == 'B') && (plansza2[bxminus3][byplus1] == 'X') && (plansza2[bxminus3][byminus3] == 'X')) {
+		cout << "Możesz zbić przeciwnika w obie strony. Zdecyduj, którą opcję wybierasz." << endl;
+		int odpowiedz;
+		cout << "Jeśli wybierasz bicie w prawą stronę wciśnij 1, jeśli wybierasz bicie w lewą stronę wciśnij 2. " << endl;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza2[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
 
-	if ((plansza2[bbx2][bby2] == 'C') && ((plansza2[bbxx2][bbyy2] == 'X') || (plansza2[bbxx2][bbyy2] == ' ')) && ((plansza2[bbxx2][by2] == 'X') || (plansza2[bbxx2][by2] == ' '))) {
+				cout << "Trwa aktualizacja planszy: " << endl;
+
+				plansza2[bxminus2][by] = 'X';
+				plansza2[bxminus3][byplus1] = 'C';
+
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < kolumny + 1; j++) {
+						cout << j << " ";
+					}
+					cout << endl;
+				}
+				int nr = 0;
+				for (int i = 0; i < wiersze; i++) {
+					cout << "";
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < kolumny; j++) {
+						cout << plansza2[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+			cout << "Następuje bicie piona białego przez piona czarnego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza1[bxminus1][byminus1] = 'X';
+			int odpow;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odpow;
+			if (odp == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_białych_pionków = liczba_białych_pionków - 1;
+				plansza1[bxminus1][byminus1] = 'X';
+				plansza1[bxminus2][byminus2] = 'X';
+				plansza1[bxminus3][byminus3] = 'C';
+
+				cout << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
+
+				int nr = 0;
+				for (int i = 0; i < 8; i++) {
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < 8; j++)
+					{
+						cout << plansza1[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		}
+
+	}
+	else if ((plansza2[bxminus1][byminus1] == 'C') && ((plansza2[bxminus2][by] == 'B') && (plansza2[bxminus3][byplus1] == 'X'))) {
+
+		cout << "Czy chcesz zbić pionka przeciwnika w prawą stronę? Wciśnij 1, jeśli tak, wciśnij 2, jeśli nie." << endl;
+		int odpowiedz = 0;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona białego przez piona czarnego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza2[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_białych_pionków = liczba_białych_pionków - 1;
+				plansza2[bxminus2][by] = 'X';
+				plansza2[bxminus3][byplus1] = 'C';
+
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < kolumny + 1; j++) {
+						cout << j << " ";
+					}
+					cout << endl;
+				}
+				int nr = 0;
+				for (int i = 0; i < wiersze; i++) {
+					cout << "";
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < kolumny; j++) {
+						cout << plansza2[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+
+			wybor_czarnego_piona_2();
+
+		}
+	}
+	else if ((plansza2[bxminus1][byminus1] == 'C') && ((plansza2[bxminus2][byminus2] == 'B') && (plansza2[bxminus3][byminus3] == 'X'))) {
+
+		cout << "Czy chcesz zbić pionka przeciwnika w lewą stronę? Wciśnij 1, jeśli tak, wciśnij 2, jeśli nie." << endl;
+		int odpowiedz = 0;
+		cin >> odpowiedz;
+		switch (odpowiedz) {
+		case 1:
+			cout << "Następuje bicie piona białego przez piona czarnego." << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza2[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
+
+				cout << "Trwa aktualizacja planszy: " << endl;
+				liczba_białych_pionków = liczba_białych_pionków - 1;
+				plansza2[bxminus1][byminus1] = 'X';
+				plansza2[bxminus2][byminus2] = 'X';
+				plansza2[bxminus3][byminus3] = 'C';
+
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < kolumny + 1; j++) {
+						cout << j << " ";
+					}
+					cout << endl;
+				}
+				int nr = 0;
+				for (int i = 0; i < wiersze; i++) {
+					cout << "";
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < kolumny; j++) {
+						cout << plansza2[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
+			break;
+		case 2:
+
+			wybor_czarnego_piona_2();
+
+		}
+	}
+	else if ((plansza2[bxminus1][byminus1] == 'C') && ((plansza2[bxminus2][byminus2] == 'X') || (plansza2[bxminus2][by] == 'X'))) {
 
 		cout << "Wybrałeś odpowiedniego pionka." << endl;
 
-
-
-		cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdowac). " << endl;
+		cout << "Wybierz pole, na które chcesz ruszyć (podaj kolejno wiersz i pole, na którym pionek ma się znajdować). " << endl;
 		cout << "Wiersze: " << endl;
 		cin >> x;
 		cout << "Kolumny: " << endl;
 		cin >> y;
-		int x12 = x - 1;
-		int y12 = y - 1;
-		int y112 = y + 1;
+
+		int xplus1 = x + 1;
+		int yplus1 = y + 1;
+		int xminus1 = x - 1;
+		int yminus1 = y - 1;
+		int xplus2 = x + 2;
+		int yplus2 = y + 2;
+		int xminus2 = x - 2;
+		int yminus2 = y - 2;
 
 
-		if ((((by2 - y == 1) ||( by2 - y == (-1))) && (bx2 - x == 1)) && (((plansza2[x12][y12] == 'X') || (plansza2[x12][y12] == 'C')) && ((plansza2[x12][y112] == 'X') || (plansza2[x12][y112] == 'C')))) {
-			cout << "Wybraleś dozwolony ruch. " << endl;
-				bbx2 = bx2 - 1;
-				bby2 = by2 - 1;
-				plansza2[bbx2][bby2] = 'X';
-				int odp;
-				cout << "Żeby zaktualizować planszę - wciśnij 1. ";
-				cin >> odp;
-				if (odp == 1) {
-					system("cls");
 
-						cout << "Trwa aktualizacja planszy: " << endl;
+		if ((bx - x == 1) && (plansza2[xminus1][yminus1] == 'X') && ((y - by == 1) || (y - by == (-1)))) {
+			cout << "Wybrałeś dozwolony ruch. " << endl;
+			bxminus1 = bx - 1;
+			byminus1 = by - 1;
+			plansza2[bxminus1][byminus1] = 'X';
+			int odp;
+			cout << "Żeby zaktualizować planszę - wciśnij 1. ";
+			cin >> odp;
+			if (odp == 1) {
+				system("cls");
 
-					w2 = x - 1;
-					k2 = y - 1;
+				cout << "Trwa aktualizacja planszy: " << endl;
 
+				w1 = x - 1;
+				k1 = y - 1;
+				plansza2[w1][k1] = 'C';
 
-					for (int i = 0; i < 1; i++) {
-						for (int j = 0; j < kolumny + 1; j++) {
-							cout << j << " ";
-						}
-						cout << endl;
+				for (int i = 0; i < 1; i++) {
+					for (int j = 0; j < kolumny + 1; j++) {
+						cout << j << " ";
 					}
-
-					plansza2[w2][k2] = 'C';
-					int nr = 0;
-					for (int i = 0; i < wiersze; i++) {
-						cout << "";
-						nr++;
-						cout << nr << " ";
-						for (int j = 0; j < kolumny; j++) {
-							cout << plansza2[i][j] << "|";
-						}
-						cout << endl;
-					}
+					cout << endl;
 				}
+				int nr = 0;
+				for (int i = 0; i < wiersze; i++) {
+					cout << "";
+					nr++;
+					cout << nr << " ";
+					for (int j = 0; j < kolumny; j++) {
+						cout << plansza2[i][j] << "|";
+					}
+					cout << endl;
+				}
+			}
 		}
+
 		else {
-			cout << "Wybrałeś niedozwolony ruch, spróbuj ponownie. " << endl;
+			cout << "Wybrałeś niedozwolony ruch. Spróbuj ponownie." << endl;
 			wybor_czarnego_piona_2();
 		}
 	}
-	else {
-		cout << "Wybrałeś nieodpowiedniego pionka, spróbuj ponownie." << endl;
-		wybor_czarnego_piona_2();
 
+	else {
+		cout << "Wybrałeś nieodpowiedniego pionka. Spróbuj ponownie." << endl;
+		wybor_czarnego_piona_2();
 	}
+
+
 }
+
 
 int main()
 {
@@ -471,10 +1219,13 @@ int main()
 		cout << "Wybrałeś gotowy rozmiar (8x8). " << endl;
 		plansza_1.gotowa_plansza_1();
 		cout << "Gotowy? Gramy! Zaczyna biały gracz. " << endl;
+
 		do {
 			wybor_bialego_piona_1();
+			cout << "Liczba białych pionków to: " << liczba_białych_pionków << endl;
 			wybor_czarnego_piona_1();
-		} while (plansza1[i][j] != 'B' || 'C');
+			cout << "Liczba czarnych pionków to: " << liczba_czarnych_pionków << endl;
+		} while ((liczba_białych_pionków > 1) || (liczba_czarnych_pionków > 1));//określenie warunku końcowego gry
 
 		break;
 
@@ -484,8 +1235,10 @@ int main()
 		cout << "Gotowy? Gramy! Zaczyna biały gracz. " << endl;
 		do {
 			wybor_bialego_piona_2();
-			wybor_czarnego_piona_2();	
-		} while (plansza2[i][j]!='B'||'C');
+			cout << "Liczba białych pionków to: " << liczba_białych_pionków << endl;
+			wybor_czarnego_piona_2();
+			cout << "Liczba czarnych pionków to: " << liczba_czarnych_pionków << endl;
+		} while ((liczba_białych_pionków > 1) || (liczba_czarnych_pionków > 1));//określenie warunku końcowego gry
 
 		for (int i = 0; i < wiersze; i++)//zwalnianie pamieci w tablicy dynamicznej
 			delete[] plansza2[i];
@@ -498,6 +1251,6 @@ int main()
 		return 0;
 	}
 
-	
+
 	return 0;
 }
