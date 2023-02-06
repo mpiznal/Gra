@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <limits>
+#include <string>
+
 using namespace std;
 
 
@@ -20,7 +22,7 @@ int w1 = 0, w2 = 0, k1 = 0, k2 = 0;//ZMIENNE DO OKREŚLENIA POZYCJI PIONKA PO RU
 int i = 0, j = 0;//ZMIENNE DO OKREŚLANIA POZYCJI PIONKÓW
 int nr = 0;//DODATKOWA ZMIENNA DO RYSOWANIA PLANSZY
 
-int numer_ruchu = 1;
+int numer_ruchu = 1;//ZMIENNA OKREŚLAJĄCA NUMER RUCHU
 
 //OKREŚLENIE WYGLĄDU GOTOWEJ PLANSZY
 char plansza1[8][8] = { ' ','B',' ','B',' ','B',' ','B',
@@ -44,10 +46,9 @@ public:
 	friend void wybor_czarnego_piona_1(int bx, int by);
 	friend void wybor_bialego_piona_2(int bx, int by);
 	friend void wybor_czarnego_piona_2(int bx, int by);
-	friend void zapis_do_pliku_1(char* plansza1, int i, int j);
-	friend void czytanie_z_pliku_1(char* plansza1, char w);
-	friend void zapis_do_pliku_2(char* plansza2, int i, int j);
-	friend void czytanie_z_pliku_2(char* plansza2);
+	friend void zapis_do_pliku_1(int i, int j);
+	friend void zapis_do_pliku_2(int i, int j);
+
 
 
 	void gotowa_plansza_1() {//WYWOŁANIE GOTOWEJ PLANSZY NA EKRAN
@@ -1894,9 +1895,9 @@ nie mozna wybrac piona innego niz bialy i piona, ktory nie lezy na linii ofensyw
 
 
 
-void zapis_do_pliku_1(char* plansza, int i, int j) {
+void zapis_do_pliku_1(int i, int j) {
 
-	ofstream zapis1("dane1.txt");//OTWORZENIE PLIKU
+	ofstream zapis1("dane1.txt", ios::out);//OTWORZENIE PLIKU
 
 	zapis1 << 0 << " " << 1 << " " << 2 << " " << 3 << " " << 4 << " " << 5 << " " << 6 << " " << 7 << " " << 8 << endl;
 	nr = 0;
@@ -1925,24 +1926,31 @@ void zapis_do_pliku_1(char* plansza, int i, int j) {
 	}
 
 	zapis1.close(); //ZAMKNIĘCIE PLIKU
-}
 
-void czytanie_z_pliku_1(char* plansza1, char w) {
-	ifstream czytaj1("dane1.txt");
 
 
 }
 
-
-void zapis_do_pliku_2(char* plansza2, int i, int j) {
+void zapis_do_pliku_2(int i, int j) {
 
 	ofstream zapis2("dane2.txt");//OTWORZENIE PLIKU
 
-
-
-	zapis2 << "Wiersze: " << wiersze << endl;
-	zapis2 << "Kolumny: " << kolumny << endl;
-	zapis2 << endl;
+	for (int i = 0; i < 1; i++) {
+		for (int j = 0; j < kolumny + 1; j++) {
+			zapis2 << j << " ";
+		}
+		zapis2 << endl;
+	}
+	int nr = 0;
+	for (int i = 0; i < wiersze; i++) {
+		zapis2 << "";
+		nr++;
+		zapis2 << nr << " ";
+		for (int j = 0; j < kolumny; j++) {
+			zapis2 << plansza2[i][j] << "|";
+		}
+		zapis2 << endl;
+	}
 
 
 	zapis2 << endl;
@@ -1962,9 +1970,6 @@ void zapis_do_pliku_2(char* plansza2, int i, int j) {
 
 
 	zapis2.close(); //ZAMKNIĘCIE PLIKU
-
-}
-void czytanie_z_pliku_2(char* plansza2) {
 
 };
 
@@ -2005,7 +2010,8 @@ X: cout << "Jeśli wybierasz gotowy rozmiar wciśnij 1, jeśli chcesz wpisać w�
 			cout << "Liczba białych pionków to: " << liczba_białych_pionków << endl;
 			cout << "Liczba czarnych pionków to: " << liczba_czarnych_pionków << endl;
 			numer_ruchu++;
-			zapis_do_pliku_1(*plansza1, i, j);//ZAPISYWANIE DANYCH DO PLIKU
+			zapis_do_pliku_1(i, j);//ZAPISYWANIE DANYCH DO PLIKU
+
 
 
 			if (liczba_czarnych_pionków == 0) {
@@ -2028,7 +2034,8 @@ X: cout << "Jeśli wybierasz gotowy rozmiar wciśnij 1, jeśli chcesz wpisać w�
 			cout << "Liczba białych pionków to: " << liczba_białych_pionków << endl;
 			cout << "Liczba czarnych pionków to: " << liczba_czarnych_pionków << endl;
 			numer_ruchu++;
-			zapis_do_pliku_1(*plansza1, i, j);//ZAPISYWANIE DANYCH DO PLIKU
+			zapis_do_pliku_1(i, j);//ZAPISYWANIE DANYCH DO PLIKU
+
 
 			if (liczba_białych_pionków == 0) {
 				cout << "Wygrał czarny gracz. Gratulacje!" << endl;
@@ -2065,7 +2072,7 @@ X: cout << "Jeśli wybierasz gotowy rozmiar wciśnij 1, jeśli chcesz wpisać w�
 			cout << "Liczba białych pionków to: " << liczba_białych_pionków << endl;
 			cout << "Liczba czarnych pionków to: " << liczba_czarnych_pionków << endl;
 			numer_ruchu++;
-			zapis_do_pliku_2(*plansza2, i, j);
+			zapis_do_pliku_2(i, j);
 
 			if (liczba_czarnych_pionków == 0) {
 				cout << "Wygrał biały gracz. Gratulacje!" << endl;
@@ -2086,7 +2093,7 @@ X: cout << "Jeśli wybierasz gotowy rozmiar wciśnij 1, jeśli chcesz wpisać w�
 			cout << "Liczba białych pionków to: " << liczba_białych_pionków << endl;
 			cout << "Liczba czarnych pionków to: " << liczba_czarnych_pionków << endl;
 			numer_ruchu++;
-			zapis_do_pliku_2(*plansza2, i, j);
+			zapis_do_pliku_2(i, j);
 
 			if (liczba_białych_pionków == 0) {
 				cout << "Wygrał czarny gracz. Gratulacje!" << endl;
@@ -2115,10 +2122,6 @@ X: cout << "Jeśli wybierasz gotowy rozmiar wciśnij 1, jeśli chcesz wpisać w�
 
 		return 0;
 	}
-
-
-
-
 
 
 
